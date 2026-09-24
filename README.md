@@ -51,7 +51,9 @@ $detectedUrls = $service->detectUrls(
     'Check out these websites: example.com, https://github.com, and www.laravel.com/docs'
 );
 
-// $detectedUrls will contain a JSON string with the detected URLs
+// detectUrls() returns a status URL; fetchResults() polls until the job is done
+$job = $service->fetchResults($detectedUrls);
+$urls = json_decode($job->getResultJson(), true); // list of ['url' => ..., 'protocol' => ...]
 ```
 
 ## Parameters
@@ -86,6 +88,18 @@ The response is a JSON string containing an array of detected URLs with their pr
 - Identifies the protocol for each URL
 - Handles URLs with different TLDs (.com, .org, .io, etc.)
 - Useful for content moderation, data extraction, and link validation
+
+## AI agents (Laravel Boost)
+
+This package ships a [Laravel Boost](https://github.com/laravel/boost) skill, `sharpapi-content-detect-urls`. It teaches AI coding agents the async submit-then-`fetchResults()` flow, the queued-job recipe, the result shape and the testing approach. Boost 2 or newer is required. In your app:
+
+```bash
+composer require laravel/boost --dev
+php artisan boost:install          # first time
+php artisan boost:update --discover # already using Boost
+```
+
+Select `sharpapi/laravel-content-detect-urls` when Boost lists the packages it found. The skill loads on demand; no always-on guideline is added.
 
 ## Credits
 
