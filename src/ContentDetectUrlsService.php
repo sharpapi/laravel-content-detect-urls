@@ -37,6 +37,11 @@ class ContentDetectUrlsService extends SharpApiClient
                 'sharpapi-content-detect-urls.api_job_status_polling_wait',
                 180)
         );
+        $this->setUseCustomInterval(
+            (bool) config(
+                'sharpapi-content-detect-urls.api_job_status_use_polling_interval',
+                false)
+        );
         $this->setUserAgent('SharpAPILaravelContentDetectUrls/1.0.0');
     }
 
@@ -44,7 +49,7 @@ class ContentDetectUrlsService extends SharpApiClient
      * Parses the provided text for any possible URLs. Might come in handy in case of processing and validating
      * big chunks of data against URLs or if you want to detect URLs in places where they're not supposed to be.
      *
-     * @param string $text The text to analyze for URLs
+     * @param  string  $text  The text to analyze for URLs
      * @return string The detected URLs or an error message
      *
      * @throws GuzzleException
